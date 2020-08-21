@@ -1,14 +1,13 @@
 ######################
 # Project Specific
 ######################
-/build/www/**
-/src/test/javascript/coverage/
-/src/test/javascript/PhantomJS*/
+src/test/javascript/coverage/
+src/test/javascript/PhantomJS*/
 
 ######################
 # Node
 ######################
-/node/
+node/
 node_tmp/
 node_modules/
 npm-debug.log.*
@@ -35,7 +34,7 @@ local.properties
 .settings/
 .loadpath
 .factorypath
-/src/main/resources/rebel.xml
+src/main/resources/rebel.xml
 
 # External tool builders
 .externalToolBuilders/**
@@ -67,14 +66,14 @@ local.properties
 ######################
 # Maven
 ######################
-/log/
-/target/
+log/
+target/
 
 ######################
 # Gradle
 ######################
 .gradle/
-/build/
+build/
 
 ######################
 # Package Files
@@ -109,8 +108,8 @@ Desktop.ini
 ######################
 # Directories
 ######################
-/bin/
-/deploy/
+bin/
+deploy/
 
 ######################
 # Logs
