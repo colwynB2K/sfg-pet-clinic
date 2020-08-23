@@ -4,7 +4,7 @@ import guru.springframework.model.Pet;
 
 import java.util.Set;
 
-public interface PerService {
+public interface PetService {
 
     Pet findById(Long id);
 
