@@ -35,7 +35,20 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <configuration>
+                    <goals>install</goals><!-- By default it will run Maven goal 'deploy' which runs compile, test, package, verify, install, site, deploy and we don't want all this -->
+                    <autoVersionSubmodules>true</autoVersionSubmodules><!-- automatically use the same version numbers for all Maven submodules, otherwise it will prompt you for a version number for each module -->
+                </configuration>
+            </plugin>
         </plugins>
     </build>
+
+    <!-- Provide a reference to your SCM repository so maven-release-plugin can commit to it automagically -->
+    <scm>
+        <developerConnection>scm:git:https://github.com/colwynB2K/sfg-pet-clinic.git</developerConnection>
+    </scm>
 
 </project>
