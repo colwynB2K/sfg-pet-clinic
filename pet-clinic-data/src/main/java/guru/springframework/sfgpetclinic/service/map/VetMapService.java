@@ -19,13 +19,13 @@ public class VetMapService extends AbstractMapService<Vet, Long> implements VetS
     }
 
     @Override
-    public void delete(Vet Vet) {
-        super.delete(Vet);
+    public void delete(Vet vet) {
+        super.delete(vet);
     }
 
     @Override
-    public Vet save(Vet Vet) {
-        return super.save(Vet.getId(), Vet);
+    public Vet save(Vet vet) {
+        return super.save(vet);
     }
 
     @Override

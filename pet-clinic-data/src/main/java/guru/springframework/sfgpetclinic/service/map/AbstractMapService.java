@@ -1,13 +1,12 @@
 package guru.springframework.sfgpetclinic.service.map;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import guru.springframework.sfgpetclinic.model.BaseEntity;
 
-public class AbstractMapService<T, ID> {
+import java.util.*;
 
-    protected Map<ID, T> map = new HashMap<>();
+public class AbstractMapService<T extends BaseEntity, ID extends Long> {
+
+    protected Map<Long, T> map = new HashMap<>();
 
     Set<T> findAll() {
         return new HashSet<>(map.values());
@@ -17,10 +16,16 @@ public class AbstractMapService<T, ID> {
         return map.get(id);
     }
 
-    T save(ID id, T object) { // Because we are saving the object into a HashMap we need a key to save the value under.
-                              // However, because we are passing in a generic object we can just do object.getId() as we don't know if the object will even have this method
-                              // So we add the id as a method paramater and let the concrete class provide the id value depending on its actual properties
-        map.put(id, object);
+    T save(T object) throws RuntimeException {
+        if (object != null) {
+            if (object.getId() == null) {
+                object.setId(getNextId());
+            }
+
+            map.put(object.getId(), object);
+        } else {
+            throw new RuntimeException("Object can't be null!");
+        }
 
         return object;
     }
@@ -31,6 +36,10 @@ public class AbstractMapService<T, ID> {
 
     void delete(T object) {
         map.entrySet().removeIf(entry -> entry.getValue().equals(object)); // Removes all of the elements of this collection that satisfy the given predicate, but this requires our entities to implement an equals method!
+    }
+
+    private Long getNextId() {
+        return map.isEmpty() ? 1L : Collections.max(map.keySet()) + 1;
     }
 
 }
