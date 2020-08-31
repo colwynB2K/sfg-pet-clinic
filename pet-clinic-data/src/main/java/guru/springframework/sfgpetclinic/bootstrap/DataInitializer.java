@@ -1,6 +1,7 @@
 package guru.springframework.sfgpetclinic.bootstrap;
 
 import guru.springframework.sfgpetclinic.model.Owner;
+import guru.springframework.sfgpetclinic.model.Pet;
 import guru.springframework.sfgpetclinic.model.PetType;
 import guru.springframework.sfgpetclinic.model.Vet;
 import guru.springframework.sfgpetclinic.service.OwnerService;
@@ -9,6 +10,8 @@ import guru.springframework.sfgpetclinic.service.VetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDate;
 
 @Component
 public class DataInitializer implements CommandLineRunner {
@@ -33,26 +36,48 @@ public class DataInitializer implements CommandLineRunner {
         PetType cat = new PetType();
         cat.setName("cat");
 
-        PetType savedCatType = petTypeService.save(cat);
+        PetType savedCatPetType = petTypeService.save(cat);
 
         PetType dog = new PetType();
         dog.setName("dog");
 
-        PetType savedDogType = petTypeService.save(dog);
+        PetType savedDogPetType = petTypeService.save(dog);
 
         System.out.println("Loaded Pet Types...");
 
-        Owner owner1 = new Owner();
-        owner1.setFirstName("Michael");
-        owner1.setLastName("Weston");
+        Owner mike = new Owner();
+        mike.setFirstName("Michael");
+        mike.setLastName("Weston");
+        mike.setAddress("123 Brickerel");
+        mike.setCity("Miami");
+        mike.setTelephone("1231231234");
 
-        ownerService.save(owner1);
+        Pet mikesPet = new Pet();
+        mikesPet.setPetType(savedDogPetType);
+        mikesPet.setName("Rosco");
+        mikesPet.setBirthDate(LocalDate.now());
+        mikesPet.setOwner(mike);
 
-        Owner owner2 = new Owner();
-        owner2.setFirstName("Fiona");
-        owner2.setLastName("Glenanne");
+        mike.getPets().add(mikesPet);           // Don't forget the reverse direction!
 
-        ownerService.save(owner2);
+        ownerService.save(mike);
+
+        Owner fiona = new Owner();
+        fiona.setFirstName("Fiona");
+        fiona.setLastName("Glenanne");
+        fiona.setAddress("123 Brickerel");
+        fiona.setCity("Miami");
+        fiona.setTelephone("555123456");
+
+        Pet fionasPet = new Pet();
+        fionasPet.setPetType(savedCatPetType);
+        fionasPet.setName("Toulouse");
+        fionasPet.setBirthDate(LocalDate.now());
+        fionasPet.setOwner(fiona);
+
+        fiona.getPets().add(fionasPet);           // Don't forget the reverse direction!
+
+        ownerService.save(fiona);
 
         System.out.println("Loaded Owners...");
 
