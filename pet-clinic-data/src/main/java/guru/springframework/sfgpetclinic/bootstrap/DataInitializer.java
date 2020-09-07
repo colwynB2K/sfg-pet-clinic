@@ -87,15 +87,15 @@ public class DataInitializer implements CommandLineRunner {
         System.out.println("Loaded Owners...");
 
         Specialty radiology = new Specialty();
-        radiology.setDescription("Radiology");
+        radiology.setName("Radiology");
         Specialty savedRadiologySpecialty = specialtyService.save(radiology);
 
         Specialty surgery = new Specialty();
-        surgery.setDescription("Surgery");
+        surgery.setName("Surgery");
         Specialty savedSurgerySpecialty = specialtyService.save(surgery);
 
         Specialty dentistry = new Specialty();
-        dentistry.setDescription("Dentistry");
+        dentistry.setName("Dentistry");
         Specialty savedDentistrySpecialty = specialtyService.save(dentistry);
 
         System.out.println("Loaded Specialties...");
