@@ -1,10 +1,7 @@
 package guru.springframework.sfgpetclinic.bootstrap;
 
 import guru.springframework.sfgpetclinic.model.*;
-import guru.springframework.sfgpetclinic.service.OwnerService;
-import guru.springframework.sfgpetclinic.service.PetTypeService;
-import guru.springframework.sfgpetclinic.service.SpecialtyService;
-import guru.springframework.sfgpetclinic.service.VetService;
+import guru.springframework.sfgpetclinic.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -16,18 +13,22 @@ public class DataInitializer implements CommandLineRunner {
 
     private final OwnerService ownerService;
     private final PetTypeService petTypeService;
-    private final VetService vetService;
     private final SpecialtyService specialtyService;
+    private final VetService vetService;
+    private final VisitService visitService;
 
     @Autowired
     public DataInitializer(
             OwnerService ownerService,
             PetTypeService petTypeService,
-            VetService vetService, SpecialtyService specialtyService) {
+            SpecialtyService specialtyService,
+            VetService vetService,
+            VisitService visitService) {
         this.ownerService = ownerService;
         this.petTypeService = petTypeService;
-        this.vetService = vetService;
         this.specialtyService = specialtyService;
+        this.vetService = vetService;
+        this.visitService = visitService;
     }
 
     @Override
@@ -117,5 +118,21 @@ public class DataInitializer implements CommandLineRunner {
         vetService.save(vet2);
 
         System.out.println("Loaded Vets...");
+
+        Visit mikesDogVisit = new Visit();
+        mikesDogVisit.setDescription("Vasectomy");
+        mikesDogVisit.setDate(LocalDate.now());
+        mikesDogVisit.setPet(mikesPet);
+
+        visitService.save(mikesDogVisit);
+
+        Visit fionasCatVisit = new Visit();
+        fionasCatVisit.setDescription("Sneezy Kitty");
+        fionasCatVisit.setDate(LocalDate.now());
+        fionasCatVisit.setPet(fionasPet);
+
+        visitService.save(fionasCatVisit);
+
+        System.out.println("Loaded Visits...");
     }
 }
