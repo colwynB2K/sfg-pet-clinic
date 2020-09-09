@@ -1,6 +1,6 @@
 package guru.springframework.sfgpetclinic.service.springdatajpa;
 
-import guru.springframework.sfgpetclinic.exception.OwnerNotFoundException;
+import guru.springframework.sfgpetclinic.exception.ObjectNotFoundException;
 import guru.springframework.sfgpetclinic.model.Owner;
 import guru.springframework.sfgpetclinic.repository.OwnerRepository;
 import guru.springframework.sfgpetclinic.repository.PetRepository;
@@ -44,7 +44,7 @@ public class OwnerRepositoryService implements OwnerService {
 
     @Override
     public Owner findById(Long id) {
-        return ownerRepository.findById(id).orElseThrow(() -> new OwnerNotFoundException("No owner found for id'" + id + "'"));
+        return ownerRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("No owner found for id'" + id + "'"));
     }
 
     @Override
