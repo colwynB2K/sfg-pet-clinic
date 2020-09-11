@@ -4,6 +4,7 @@ import guru.springframework.sfgpetclinic.exception.ObjectNotFoundException;
 import guru.springframework.sfgpetclinic.model.Vet;
 import guru.springframework.sfgpetclinic.repository.VetRepository;
 import guru.springframework.sfgpetclinic.service.VetService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import java.util.Set;
 
 @Service
 @Profile("SpringDataJPA")                                                                                       // Avoid conflict with the OwnerMapService implementation bean of OwnerService
+@Slf4j
 public class VetRepositoryService implements VetService {
 
     private final VetRepository vetRepository;

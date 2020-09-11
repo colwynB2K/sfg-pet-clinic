@@ -4,6 +4,7 @@ import guru.springframework.sfgpetclinic.exception.ObjectNotFoundException;
 import guru.springframework.sfgpetclinic.model.PetType;
 import guru.springframework.sfgpetclinic.repository.PetTypeRepository;
 import guru.springframework.sfgpetclinic.service.PetTypeService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import java.util.Set;
 
 @Service
 @Profile("SpringDataJPA")
+@Slf4j
 public class PetTypeRepositoryService implements PetTypeService {
 
     private final PetTypeRepository petTypeRepository;

@@ -2,6 +2,7 @@ package guru.springframework.sfgpetclinic.bootstrap;
 
 import guru.springframework.sfgpetclinic.model.*;
 import guru.springframework.sfgpetclinic.service.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 
 @Component
+@Slf4j
 public class DataInitializer implements CommandLineRunner {
 
     private final OwnerService ownerService;
@@ -33,7 +35,7 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        if (petTypeService.findAll().size() == 0) {                         // Make sure that the data is only initialized in case there is no data
+        if (petTypeService.findAll().isEmpty()) {                         // Make sure that the data is only initialized in case there is no data
             loadData();
         }
     }
@@ -49,14 +51,15 @@ public class DataInitializer implements CommandLineRunner {
 
         PetType savedDogPetType = petTypeService.save(dog);
 
-        System.out.println("Loaded Pet Types...");
+        log.info("Loaded Pet Types...");
 
-        Owner mike = new Owner();
-        mike.setFirstName("Michael");
-        mike.setLastName("Weston");
-        mike.setAddress("123 Brickerel");
-        mike.setCity("Miami");
-        mike.setTelephone("1231231234");
+        Owner mike = Owner.builder()
+                .firstName("Michael")
+                .lastName("Weston")
+                .address("123 Brickerel")
+                .city("Miami")
+                .telephone("1231231234")
+                .build();
 
         Pet mikesPet = new Pet();
         mikesPet.setPetType(savedDogPetType);
@@ -68,12 +71,13 @@ public class DataInitializer implements CommandLineRunner {
 
         ownerService.save(mike);
 
-        Owner fiona = new Owner();
-        fiona.setFirstName("Fiona");
-        fiona.setLastName("Glenanne");
-        fiona.setAddress("123 Brickerel");
-        fiona.setCity("Miami");
-        fiona.setTelephone("555123456");
+        Owner fiona = Owner.builder()
+                .firstName("Fiona")
+                .lastName("Glenanne")
+                .address("123 Brickerel")
+                .city("Miami")
+                .telephone("555123456")
+                .build();
 
         Pet fionasPet = new Pet();
         fionasPet.setPetType(savedCatPetType);
@@ -85,7 +89,7 @@ public class DataInitializer implements CommandLineRunner {
 
         ownerService.save(fiona);
 
-        System.out.println("Loaded Owners...");
+        log.info("Loaded Owners...");
 
         Specialty radiology = new Specialty();
         radiology.setName("Radiology");
@@ -99,7 +103,7 @@ public class DataInitializer implements CommandLineRunner {
         dentistry.setName("Dentistry");
         Specialty savedDentistrySpecialty = specialtyService.save(dentistry);
 
-        System.out.println("Loaded Specialties...");
+        log.info("Loaded Specialties...");
 
         Vet vet1 = new Vet();
         vet1.setFirstName("Sam");
@@ -117,7 +121,7 @@ public class DataInitializer implements CommandLineRunner {
 
         vetService.save(vet2);
 
-        System.out.println("Loaded Vets...");
+        log.info("Loaded Vets...");
 
         Visit mikesDogVisit = new Visit();
         mikesDogVisit.setDescription("Vasectomy");
@@ -133,6 +137,6 @@ public class DataInitializer implements CommandLineRunner {
 
         visitService.save(fionasCatVisit);
 
-        System.out.println("Loaded Visits...");
+        log.info("Loaded Visits...");
     }
 }
