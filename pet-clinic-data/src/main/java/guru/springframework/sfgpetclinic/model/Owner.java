@@ -17,14 +17,13 @@ import java.util.Set;
 public class Owner extends Person {
 
     @Builder
-    public Owner(Long id, String firstName, String lastName, String address, String city, String telephone, Set<Pet> pets) {		// We explicitly coded the all args constructor as @AllArgsConstructor would only include the firstName and lastName properties with the properties from the super class
+    public Owner(Long id, String firstName, String lastName, String address, String city, String telephone) {		// We explicitly coded the all args constructor as @AllArgsConstructor would only include the firstName and lastName properties with the properties from the super class
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
         this.city = city;
         this.telephone = telephone;
-        this.pets = pets;
     }
 
     @Column(name = "address")
