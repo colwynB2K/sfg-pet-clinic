@@ -73,7 +73,7 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
             <exclusions>
-                <exclusion>
+                <exclusion><!-- Remove the JUnit 3-4 support from the spring-boot-starter-test dependency -->
                     <groupId>org.junit.vintage</groupId>
                     <artifactId>junit-vintage-engine</artifactId>
                 </exclusion>
