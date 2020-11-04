@@ -16,9 +16,9 @@
         </thead>
         <tbody>
             <tr th:each="owner: ${owners}">
-                <td th:text="${owner.id}">ID</td>
-                <td th:text="${owner.firstName}">FirstName</td>
-                <td th:text="${owner.lastName}">LastName</td>
+                <td><a href="#" th:href="@{'/owners/' + ${owner.id}}" th:text="${owner.id}">ID</a></td>
+                <td><a href="#" th:href="@{'/owners/' + ${owner.id}}" th:text="${owner.firstName}">FirstName</a></td>
+                <td><a href="#" th:href="@{'/owners/' + ${owner.id}}" th:text="${owner.lastName}">LastName</a></td>
             </tr>
         </tbody>
     </table>
