@@ -61,4 +61,20 @@ class OwnerControllerTest {
 
         verifyNoInteractions(mockOwnerService);                             // As this method is not implemented yet, this should interact with the ownerService at all!
     }
+
+    @Test
+    void showOwner() throws Exception {
+        Owner expectedOwner = Owner.builder().build();
+
+        // given
+        when(mockOwnerService.findById(anyLong())).thenReturn(expectedOwner);
+
+        // when
+        mockMvc.perform(get("/owners/1"))
+        .andExpect(status().isOk())
+        .andExpect(model().attribute("owner", equalTo(expectedOwner)))
+        .andExpect(view().name("owners/detail"));
+
+        // then
+    }
 }

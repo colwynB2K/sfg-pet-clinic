@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @Slf4j
@@ -30,5 +32,13 @@ public class OwnerController {
     @GetMapping("/find")
     public String findOwners() {
         return "notimplemented";
+    }
+
+    @GetMapping("/{ownerId}")
+    public ModelAndView showOwner(@PathVariable Long ownerId) {             // Instead of returning a String with the view path in it and injecting the Model via a method argument, you can use the ModelAndView composite object to handle this a different way
+        ModelAndView mav = new ModelAndView("owners/detail");
+        mav.addObject(ownerService.findById(ownerId));
+
+        return mav;
     }
 }
