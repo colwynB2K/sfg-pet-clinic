@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -55,11 +56,58 @@ class OwnerControllerTest {
     }
 
     @Test
-    void findOwners() throws Exception {
+    void showFindOwnersForm() throws Exception {
         mockMvc.perform(get("/owners/find"))
-                .andExpect(view().name("notimplemented"));
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("owner"))
+                .andExpect(view().name("owners/search-form"));
 
-        verifyNoInteractions(mockOwnerService);                             // As this method is not implemented yet, this should interact with the ownerService at all!
+        verifyNoInteractions(mockOwnerService);                                         // As this method is not implemented yet, this should interact with the ownerService at all!
+    }
+
+    @Test
+    void findOwnersReturnsNone() throws Exception {
+        Long id = 1L;
+
+        // given
+        when(mockOwnerService.findAllByLastNameLike(anyString())).thenReturn(Collections.EMPTY_SET);
+
+        // when
+        mockMvc.perform(get("/owners?lastName=BLAAT"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("owners/search-form"));
+
+        verify(mockOwnerService).findAllByLastNameLike(anyString());
+    }
+
+    @Test
+    void findOwnersReturnsOne() throws Exception {
+        Long id = 1L;
+
+        // given
+        when(mockOwnerService.findAllByLastNameLike(anyString())).thenReturn(Collections.singleton(Owner.builder().id(id).build()));
+
+        // when
+        mockMvc.perform(get("/owners?lastName=BLAAT"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/owners/" + id));
+
+        verify(mockOwnerService).findAllByLastNameLike(anyString());
+    }
+
+    @Test
+    void findOwnersReturnsMany() throws Exception {
+        // given
+        owners.add(Owner.builder().city("Genk").build());                                     // Add second owner to set with city Genk (otherwise it won't get added as Set doesn't allow duplicates)
+        when(mockOwnerService.findAllByLastNameLike(anyString())).thenReturn(owners);
+
+        // when
+        mockMvc.perform(get("/owners?lastName=BLAAT"))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("owners", equalTo(owners)))
+                .andExpect(view().name("owners/list"));
+
+        verify(mockOwnerService).findAllByLastNameLike(anyString());
     }
 
     @Test

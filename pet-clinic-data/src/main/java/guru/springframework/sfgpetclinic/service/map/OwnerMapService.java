@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -87,5 +88,17 @@ public class OwnerMapService extends AbstractMapService<Owner, Long> implements 
         }
 
         throw new RuntimeException("Couldn't find Owner with lastName '" + lastName + "'");
+    }
+
+    @Override
+    public Set<Owner> findAllByLastNameLike(String lastName) {
+        Set<Owner> owners = new HashSet<>();
+        for (Map.Entry<Long, Owner> entry : map.entrySet()) {
+            if (entry.getValue().getLastName().contains(lastName)) {
+                owners.add(entry.getValue());
+            }
+        }
+
+        return owners;
     }
 }

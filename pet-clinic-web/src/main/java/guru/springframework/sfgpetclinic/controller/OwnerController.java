@@ -1,14 +1,19 @@
 package guru.springframework.sfgpetclinic.controller;
 
+import guru.springframework.sfgpetclinic.model.Owner;
 import guru.springframework.sfgpetclinic.service.OwnerService;
+import io.micrometer.core.instrument.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.util.CollectionUtils;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.Set;
 
 @Controller
 @Slf4j
@@ -22,16 +27,38 @@ public class OwnerController {
         this.ownerService = ownerService;
     }
 
+    @InitBinder
+    public void setAllowedFields(WebDataBinder dataBinder) {
+        dataBinder.setDisallowedFields("id");
+    }
+
     @GetMapping({"", "/", "/index", "/index.html"})
-    public String listOwners(Model model) {
-        model.addAttribute("owners", ownerService.findAll());
+    public String listOwners(@ModelAttribute Owner owner, BindingResult bindingResult, Model model) {		// @ModelAttribute is used to bind the data from the owner object in the form to this method, BindingResult parameter needs to be defined directly after this
+        if (StringUtils.isNotBlank(owner.getLastName())) {
+            Set<Owner> owners = ownerService.findAllByLastNameLike(owner.getLastName());
+
+            if (CollectionUtils.isEmpty(owners)) {
+                // No owners found
+                bindingResult.rejectValue("lastName", "notfound", "not found");                     // In case no results were found, reject the entered lastName value via bindingResult and trigger the error message
+                return "owners/search-form";
+            } else if (owners.size() == 1) {
+                return "redirect:/owners/" + owners.iterator().next().getId();                              // Redirect to owner detail page in case only 1 result is found
+            }
+
+            model.addAttribute("owners", owners);
+        } else {
+            model.addAttribute("owners", ownerService.findAll());                                       // If a no value was entered, just return all owners
+        }
 
         return "owners/list";
     }
 
     @GetMapping("/find")
-    public String findOwners() {
-        return "notimplemented";
+    public ModelAndView showFindOwnersForm() {
+        ModelAndView mav = new ModelAndView("owners/search-form");
+        mav.addObject(new Owner());
+
+        return mav;
     }
 
     @GetMapping("/{ownerId}")
