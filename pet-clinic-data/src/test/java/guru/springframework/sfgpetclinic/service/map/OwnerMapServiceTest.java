@@ -1,8 +1,8 @@
 package guru.springframework.sfgpetclinic.service.map;
 
-import guru.springframework.sfgpetclinic.model.Owner;
-import guru.springframework.sfgpetclinic.model.Pet;
-import guru.springframework.sfgpetclinic.model.PetType;
+import guru.springframework.sfgpetclinic.dto.OwnerDTO;
+import guru.springframework.sfgpetclinic.dto.PetDTO;
+import guru.springframework.sfgpetclinic.dto.PetTypeDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,8 +16,8 @@ class OwnerMapServiceTest {
 
     private final Long OWNER_ID = 1L;
     private final String OWNER_LAST_NAME = "Doe";
-    private final Pet pet = new Pet();
-    private final Owner owner = Owner.builder().id(OWNER_ID).lastName(OWNER_LAST_NAME).build();
+    private final PetDTO pet = new PetDTO();
+    private final OwnerDTO owner = OwnerDTO.builder().id(OWNER_ID).lastName(OWNER_LAST_NAME).build();
 
 
     @BeforeEach
@@ -30,7 +30,7 @@ class OwnerMapServiceTest {
     @Test
     void findAll() {
         // when
-        Set<Owner> actualOwners = ownerMapService.findAll();
+        Set<OwnerDTO> actualOwners = ownerMapService.findAll();
 
         // then
         assertEquals(1, actualOwners.size());
@@ -48,7 +48,7 @@ class OwnerMapServiceTest {
     @Test
     void delete() {
         // given
-        Owner owner = ownerMapService.map.get(OWNER_ID);
+        OwnerDTO owner = ownerMapService.map.get(OWNER_ID);
 
         // when
         ownerMapService.delete(owner);
@@ -61,19 +61,19 @@ class OwnerMapServiceTest {
     void save() {
         // given
         String petName = "Hedwig";
-        PetType petType = new PetType();
+        PetTypeDTO petType = new PetTypeDTO();
         petType.setName("Owl");
         pet.setPetType(petType);
         pet.setName(petName);
         owner.getPets().add(pet);
 
         // when
-        Owner savedOwner = ownerMapService.save(owner);
+        OwnerDTO savedOwner = ownerMapService.save(owner);
 
         // then
         assertNotNull(savedOwner);
-        Set<Pet> savedOwnerPets = savedOwner.getPets();
-        Pet savedPet = savedOwnerPets.iterator().next();
+        Set<PetDTO> savedOwnerPets = savedOwner.getPets();
+        PetDTO savedPet = savedOwnerPets.iterator().next();
         assertNotNull(savedOwner.getId());
         assertNotNull(savedPet.getId());
         assertEquals(petName, savedPet.getName());
@@ -99,7 +99,7 @@ class OwnerMapServiceTest {
     @Test
     void findById() {
         // when
-        Owner actualOwner = ownerMapService.findById(OWNER_ID);
+        OwnerDTO actualOwner = ownerMapService.findById(OWNER_ID);
 
         // then
         assertNotNull(actualOwner);
@@ -109,7 +109,7 @@ class OwnerMapServiceTest {
     @Test
     void findByLastName() {
         // when
-        Owner actualOwner = ownerMapService.findByLastName(OWNER_LAST_NAME);
+        OwnerDTO actualOwner = ownerMapService.findByLastName(OWNER_LAST_NAME);
 
         // then
         assertNotNull(actualOwner);

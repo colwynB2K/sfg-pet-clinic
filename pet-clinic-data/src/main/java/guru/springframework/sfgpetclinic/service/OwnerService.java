@@ -1,12 +1,12 @@
 package guru.springframework.sfgpetclinic.service;
 
-import guru.springframework.sfgpetclinic.model.Owner;
+import guru.springframework.sfgpetclinic.dto.OwnerDTO;
 
 import java.util.Set;
 
-public interface OwnerService extends CrudService<Owner, Long> {
+public interface OwnerService extends CrudService<OwnerDTO, Long> {
 
-    Owner findByLastName(String lastName);
+    OwnerDTO findByLastName(String lastName);
 
-    Set<Owner> findAllByLastNameLike(String lastName);
+    Set<OwnerDTO> findAllByLastNameLike(String lastName);
 }

@@ -1,8 +1,8 @@
 package guru.springframework.sfgpetclinic.service.map;
 
-import guru.springframework.sfgpetclinic.model.Owner;
-import guru.springframework.sfgpetclinic.model.Pet;
-import guru.springframework.sfgpetclinic.model.PetType;
+import guru.springframework.sfgpetclinic.dto.OwnerDTO;
+import guru.springframework.sfgpetclinic.dto.PetDTO;
+import guru.springframework.sfgpetclinic.dto.PetTypeDTO;
 import guru.springframework.sfgpetclinic.service.OwnerService;
 import guru.springframework.sfgpetclinic.service.PetService;
 import guru.springframework.sfgpetclinic.service.PetTypeService;
@@ -18,7 +18,7 @@ import java.util.Set;
 @Service
 @Profile({"default", "Map"})
 @Slf4j
-public class OwnerMapService extends AbstractMapService<Owner, Long> implements OwnerService {
+public class OwnerMapService extends AbstractMapService<OwnerDTO, Long> implements OwnerService {
 
     private final PetTypeService petTypeService;
     private final PetService petService;
@@ -30,7 +30,7 @@ public class OwnerMapService extends AbstractMapService<Owner, Long> implements 
     }
 
     @Override
-    public Set<Owner> findAll() {
+    public Set<OwnerDTO> findAll() {
         return super.findAll();         // Call the method of the AbstractMapService with the correct Type
     }
 
@@ -40,20 +40,20 @@ public class OwnerMapService extends AbstractMapService<Owner, Long> implements 
     }
 
     @Override
-    public void delete(Owner owner) {
+    public void delete(OwnerDTO owner) {
         super.delete(owner);
     }
 
     @Override
-    public Owner save(Owner owner) {
+    public OwnerDTO save(OwnerDTO owner) {
         if (owner != null) {
-            Set<Pet> pets = owner.getPets();
+            Set<PetDTO> pets = owner.getPets();
             if (pets != null) {
                 pets.forEach(pet -> {
-                    PetType petType = pet.getPetType();
+                    PetTypeDTO petType = pet.getPetType();
                     if (petType != null) {
                         if (petType.getId() == null) {                                   // If the PetType wasn't persisted yet
-                            PetType savedPetTypeWithId = petTypeService.save(petType);   // save it
+                            PetTypeDTO savedPetTypeWithId = petTypeService.save(petType);   // save it
                             pet.setPetType(savedPetTypeWithId);                          // set the saved Pet Type with id on the pet object
                         }
                     } else {
@@ -61,7 +61,7 @@ public class OwnerMapService extends AbstractMapService<Owner, Long> implements 
                     }
 
                     if (pet.getId() == null) {                                          // If the Pet wasn't persisted yet
-                        Pet savedPetWithId = petService.save(pet);                      // save it
+                        PetDTO savedPetWithId = petService.save(pet);                      // save it
                         pet.setId(savedPetWithId.getId());                              // Make sure to stored the saved pet id on the current Pet object
                     }
                 });
@@ -75,13 +75,13 @@ public class OwnerMapService extends AbstractMapService<Owner, Long> implements 
     }
 
     @Override
-    public Owner findById(Long id) {
+    public OwnerDTO findById(Long id) {
         return super.findById(id);
     }
 
     @Override
-    public Owner findByLastName(String lastName) {
-        for (Map.Entry<Long, Owner> entry : map.entrySet()) {
+    public OwnerDTO findByLastName(String lastName) {
+        for (Map.Entry<Long, OwnerDTO> entry : map.entrySet()) {
             if (lastName.equals(entry.getValue().getLastName())) {
                 return entry.getValue();
             }
@@ -91,9 +91,9 @@ public class OwnerMapService extends AbstractMapService<Owner, Long> implements 
     }
 
     @Override
-    public Set<Owner> findAllByLastNameLike(String lastName) {
-        Set<Owner> owners = new HashSet<>();
-        for (Map.Entry<Long, Owner> entry : map.entrySet()) {
+    public Set<OwnerDTO> findAllByLastNameLike(String lastName) {
+        Set<OwnerDTO> owners = new HashSet<>();
+        for (Map.Entry<Long, OwnerDTO> entry : map.entrySet()) {
             if (entry.getValue().getLastName().contains(lastName)) {
                 owners.add(entry.getValue());
             }

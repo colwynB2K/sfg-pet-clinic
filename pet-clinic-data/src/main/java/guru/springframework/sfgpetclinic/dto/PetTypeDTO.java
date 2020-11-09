@@ -1,17 +1,10 @@
-package guru.springframework.sfgpetclinic.model;
+package guru.springframework.sfgpetclinic.dto;
 
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
 @Data
-@Entity
-@Table(name = "pet_type")
-public class PetType extends BaseEntity {
+public class PetTypeDTO extends BaseDTO {
 
-    @Column(name = "name")
     private String name;
 
     @Override
@@ -23,10 +16,10 @@ public class PetType extends BaseEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
 
-        if (!(o instanceof PetType))
+        if (!(o instanceof PetTypeDTO))
             return false;
 
-        PetType other = (PetType) o;
+        PetTypeDTO other = (PetTypeDTO) o;
 
         return id != null && id.equals(other.getId());
     }

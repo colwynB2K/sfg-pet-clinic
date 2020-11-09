@@ -1,6 +1,6 @@
 package guru.springframework.sfgpetclinic.service.map;
 
-import guru.springframework.sfgpetclinic.model.Specialty;
+import guru.springframework.sfgpetclinic.dto.SpecialtyDTO;
 import guru.springframework.sfgpetclinic.service.SpecialtyService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
@@ -11,9 +11,9 @@ import java.util.Set;
 @Service
 @Profile({"default", "Map"})
 @Slf4j
-public class SpecialtyMapService extends AbstractMapService<Specialty, Long> implements SpecialtyService {
+public class SpecialtyMapService extends AbstractMapService<SpecialtyDTO, Long> implements SpecialtyService {
     @Override
-    public Set<Specialty> findAll() {
+    public Set<SpecialtyDTO> findAll() {
         return super.findAll();
     }
 
@@ -23,17 +23,17 @@ public class SpecialtyMapService extends AbstractMapService<Specialty, Long> imp
     }
 
     @Override
-    public void delete(Specialty specialty) {
+    public void delete(SpecialtyDTO specialty) {
         super.delete(specialty);
     }
 
     @Override
-    public Specialty save(Specialty specialty) {
+    public SpecialtyDTO save(SpecialtyDTO specialty) {
         return super.save(specialty);
     }
 
     @Override
-    public Specialty findById(Long id) {
+    public SpecialtyDTO findById(Long id) {
         return super.findById(id);
     }
 }

@@ -1,7 +1,7 @@
 package guru.springframework.sfgpetclinic.service.map;
 
-import guru.springframework.sfgpetclinic.model.Specialty;
-import guru.springframework.sfgpetclinic.model.Vet;
+import guru.springframework.sfgpetclinic.dto.SpecialtyDTO;
+import guru.springframework.sfgpetclinic.dto.VetDTO;
 import guru.springframework.sfgpetclinic.service.SpecialtyService;
 import guru.springframework.sfgpetclinic.service.VetService;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +14,7 @@ import java.util.Set;
 @Service
 @Profile({"default", "Map"})
 @Slf4j
-public class VetMapService extends AbstractMapService<Vet, Long> implements VetService {
+public class VetMapService extends AbstractMapService<VetDTO, Long> implements VetService {
 
     private final SpecialtyService specialtyService;
 
@@ -24,7 +24,7 @@ public class VetMapService extends AbstractMapService<Vet, Long> implements VetS
     }
 
     @Override
-    public Set<Vet> findAll() {
+    public Set<VetDTO> findAll() {
         return super.findAll();         // Call the method of the AbstractMapService with the correct Type
     }
 
@@ -34,17 +34,17 @@ public class VetMapService extends AbstractMapService<Vet, Long> implements VetS
     }
 
     @Override
-    public void delete(Vet vet) {
+    public void delete(VetDTO vet) {
         super.delete(vet);
     }
 
     @Override
-    public Vet save(Vet vet) {
+    public VetDTO save(VetDTO vet) {
         if (vet != null) {
-            Set<Specialty> specialties = vet.getSpecialties();
+            Set<SpecialtyDTO> specialties = vet.getSpecialties();
             specialties.forEach(specialty -> {
                 if (specialty.getId() == null) {                                            // If the current Specialty wasn't persisted yet
-                    Specialty savedSpecialtyWithId = specialtyService.save(specialty);      // save it
+                    SpecialtyDTO savedSpecialtyWithId = specialtyService.save(specialty);      // save it
                     specialty.setId(savedSpecialtyWithId.getId());                          // Make sure to stored the saved specialty id on the current Specialty object
                 }
             });
@@ -56,7 +56,7 @@ public class VetMapService extends AbstractMapService<Vet, Long> implements VetS
     }
 
     @Override
-    public Vet findById(Long id) {
+    public VetDTO findById(Long id) {
         return super.findById(id);
     }
 }

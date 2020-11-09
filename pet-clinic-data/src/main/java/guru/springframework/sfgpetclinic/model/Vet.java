@@ -17,4 +17,21 @@ public class Vet extends Person {
             inverseJoinColumns = @JoinColumn(name = "specialty_id")
     )
     private Set<Specialty> specialties = new HashSet<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof Vet))
+            return false;
+
+        Vet other = (Vet) o;
+
+        return id != null && id.equals(other.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 }

@@ -1,7 +1,8 @@
 package guru.springframework.sfgpetclinic.service.springdatajpa;
 
+import guru.springframework.sfgpetclinic.dto.VetDTO;
 import guru.springframework.sfgpetclinic.exception.ObjectNotFoundException;
-import guru.springframework.sfgpetclinic.model.Vet;
+import guru.springframework.sfgpetclinic.mapper.VetMapper;
 import guru.springframework.sfgpetclinic.repository.VetRepository;
 import guru.springframework.sfgpetclinic.service.VetService;
 import lombok.extern.slf4j.Slf4j;
@@ -18,33 +19,35 @@ import java.util.Set;
 public class VetRepositoryService implements VetService {
 
     private final VetRepository vetRepository;
+    private final VetMapper vetMapper;
 
     @Autowired
-    public VetRepositoryService(VetRepository vetRepository) {
+    public VetRepositoryService(VetRepository vetRepository, VetMapper vetMapper) {
         this.vetRepository = vetRepository;
+        this.vetMapper = vetMapper;
     }
 
     @Override
-    public Set<Vet> findAll() {
-        Set<Vet> vets = new HashSet<>();
-        vetRepository.findAll().forEach(vets::add);
+    public Set<VetDTO> findAll() {
+        Set<VetDTO> vets = new HashSet<>();
+        vetRepository.findAll().forEach(vet -> vets.add(vetMapper.toDTO(vet)));
 
         return vets;
     }
 
     @Override
-    public Vet findById(Long id) {
-        return vetRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("No Vet found for id '" + id + "'"));
+    public VetDTO findById(Long id) {
+        return vetMapper.toDTO(vetRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("No Vet found for id '" + id + "'")));
     }
 
     @Override
-    public Vet save(Vet vet) {
-        return vetRepository.save(vet);
+    public VetDTO save(VetDTO vet) {
+        return vetMapper.toDTO(vetRepository.save(vetMapper.toEntity(vet)));
     }
 
     @Override
-    public void delete(Vet vet) {
-        vetRepository.delete(vet);
+    public void delete(VetDTO vet) {
+        vetRepository.delete(vetMapper.toEntity(vet));
     }
 
     @Override

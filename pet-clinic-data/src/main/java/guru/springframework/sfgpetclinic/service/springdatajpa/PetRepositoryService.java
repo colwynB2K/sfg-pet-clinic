@@ -1,10 +1,12 @@
 package guru.springframework.sfgpetclinic.service.springdatajpa;
 
+import guru.springframework.sfgpetclinic.dto.PetDTO;
 import guru.springframework.sfgpetclinic.exception.ObjectNotFoundException;
-import guru.springframework.sfgpetclinic.model.Pet;
+import guru.springframework.sfgpetclinic.mapper.PetMapper;
 import guru.springframework.sfgpetclinic.repository.PetRepository;
 import guru.springframework.sfgpetclinic.service.PetService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
@@ -17,32 +19,36 @@ import java.util.Set;
 public class PetRepositoryService implements PetService {
 
     private final PetRepository petRepository;
+    private final PetMapper petMapper;
 
-    public PetRepositoryService(PetRepository petRepository) {
+    @Autowired
+    public PetRepositoryService(PetRepository petRepository, PetMapper petMapper) {
         this.petRepository = petRepository;
+        this.petMapper = petMapper;
     }
 
     @Override
-    public Set<Pet> findAll() {
-        Set<Pet> pets = new HashSet<>();
-        petRepository.findAll().forEach(pets::add);
+    public Set<PetDTO> findAll() {
+
+        Set<PetDTO> pets = new HashSet<>();
+        petRepository.findAll().forEach(pet -> pets.add(petMapper.toDTO(pet)));
 
         return pets;
     }
 
     @Override
-    public Pet findById(Long id) {
-        return petRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("No Pet found for id '" + id + "'"));
+    public PetDTO findById(Long id) {
+        return petMapper.toDTO(petRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("No Pet found for id '" + id + "'")));
     }
 
     @Override
-    public Pet save(Pet pet) {
-        return petRepository.save(pet);
+    public PetDTO save(PetDTO pet) {
+        return petMapper.toDTO(petRepository.save(petMapper.toEntity(pet)));
     }
 
     @Override
-    public void delete(Pet pet) {
-        petRepository.delete(pet);
+    public void delete(PetDTO pet) {
+        petRepository.delete(petMapper.toEntity(pet));
     }
 
     @Override

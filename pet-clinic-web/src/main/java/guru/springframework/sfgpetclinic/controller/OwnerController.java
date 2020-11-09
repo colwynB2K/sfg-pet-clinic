@@ -1,6 +1,6 @@
 package guru.springframework.sfgpetclinic.controller;
 
-import guru.springframework.sfgpetclinic.model.Owner;
+import guru.springframework.sfgpetclinic.dto.OwnerDTO;
 import guru.springframework.sfgpetclinic.service.OwnerService;
 import io.micrometer.core.instrument.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -33,9 +33,9 @@ public class OwnerController {
     }
 
     @GetMapping({"", "/", "/index", "/index.html"})
-    public String listOwners(@ModelAttribute Owner owner, BindingResult bindingResult, Model model) {		// @ModelAttribute is used to bind the data from the owner object in the form to this method, BindingResult parameter needs to be defined directly after this
+    public String listOwners(@ModelAttribute OwnerDTO owner, BindingResult bindingResult, Model model) {		// @ModelAttribute is used to bind the data from the owner object in the form to this method, BindingResult parameter needs to be defined directly after this
         if (StringUtils.isNotBlank(owner.getLastName())) {
-            Set<Owner> owners = ownerService.findAllByLastNameLike(owner.getLastName());
+            Set<OwnerDTO> owners = ownerService.findAllByLastNameLike(owner.getLastName());
 
             if (CollectionUtils.isEmpty(owners)) {
                 // No owners found
@@ -56,7 +56,7 @@ public class OwnerController {
     @GetMapping("/find")
     public ModelAndView showFindOwnersForm() {
         ModelAndView mav = new ModelAndView("owners/search-form");
-        mav.addObject(new Owner());
+        mav.addObject("owner", new OwnerDTO());
 
         return mav;
     }
@@ -64,7 +64,7 @@ public class OwnerController {
     @GetMapping("/{ownerId}")
     public ModelAndView showOwner(@PathVariable Long ownerId) {             // Instead of returning a String with the view path in it and injecting the Model via a method argument, you can use the ModelAndView composite object to handle this a different way
         ModelAndView mav = new ModelAndView("owners/detail");
-        mav.addObject(ownerService.findById(ownerId));
+        mav.addObject("owner", ownerService.findById(ownerId));
 
         return mav;
     }

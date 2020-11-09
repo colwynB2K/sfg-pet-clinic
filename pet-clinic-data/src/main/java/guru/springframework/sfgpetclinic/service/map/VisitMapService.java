@@ -1,9 +1,9 @@
 package guru.springframework.sfgpetclinic.service.map;
 
-import guru.springframework.sfgpetclinic.model.Owner;
-import guru.springframework.sfgpetclinic.model.Pet;
-import guru.springframework.sfgpetclinic.model.PetType;
-import guru.springframework.sfgpetclinic.model.Visit;
+import guru.springframework.sfgpetclinic.dto.OwnerDTO;
+import guru.springframework.sfgpetclinic.dto.PetDTO;
+import guru.springframework.sfgpetclinic.dto.PetTypeDTO;
+import guru.springframework.sfgpetclinic.dto.VisitDTO;
 import guru.springframework.sfgpetclinic.service.OwnerService;
 import guru.springframework.sfgpetclinic.service.PetService;
 import guru.springframework.sfgpetclinic.service.PetTypeService;
@@ -18,7 +18,7 @@ import java.util.Set;
 @Service
 @Profile({"default", "Map"})
 @Slf4j
-public class VisitMapService extends AbstractMapService<Visit, Long> implements VisitService {
+public class VisitMapService extends AbstractMapService<VisitDTO, Long> implements VisitService {
 
     private final OwnerService ownerService;
     private final PetService petService;
@@ -32,7 +32,7 @@ public class VisitMapService extends AbstractMapService<Visit, Long> implements 
     }
 
     @Override
-    public Set<Visit> findAll() {
+    public Set<VisitDTO> findAll() {
         return super.findAll();
     }
 
@@ -42,29 +42,29 @@ public class VisitMapService extends AbstractMapService<Visit, Long> implements 
     }
 
     @Override
-    public void delete(Visit visit) {
+    public void delete(VisitDTO visit) {
         super.delete(visit);
     }
 
     @Override
-    public Visit save(Visit visit) {
+    public VisitDTO save(VisitDTO visit) {
         if (visit != null) {
-            Pet pet = visit.getPet();
+            PetDTO pet = visit.getPet();
             if (pet != null) {
-                PetType petType = pet.getPetType();
+                PetTypeDTO petType = pet.getPetType();
                 if (petType != null) {
                     if (petType.getId() == null) {                                   // If the PetType wasn't persisted yet
-                        PetType savedPetTypeWithId = petTypeService.save(petType);   // save it
+                        PetTypeDTO savedPetTypeWithId = petTypeService.save(petType);   // save it
                         pet.setPetType(savedPetTypeWithId);                          // set the saved Pet Type with id on the pet object
                     }
                 } else {
                     throw new RuntimeException("Pet Type is required.");
                 }
 
-                Owner owner = pet.getOwner();
+                OwnerDTO owner = pet.getOwner();
                 if (owner != null) {
                     if (owner.getId() == null) {                                    // If the Owner wasn't persisted yet
-                        Owner savedOwnerWithId = ownerService.save(owner);          // save it
+                        OwnerDTO savedOwnerWithId = ownerService.save(owner);          // save it
                         pet.setOwner(savedOwnerWithId);                             // set the saved Owner with id on the pet object
                     }
                 } else {
@@ -72,7 +72,7 @@ public class VisitMapService extends AbstractMapService<Visit, Long> implements 
                 }
 
                 if (pet.getId() == null) {                                          // If the Pet wasn't persisted yet
-                    Pet savedPetWithId = petService.save(pet);                      // save it
+                    PetDTO savedPetWithId = petService.save(pet);                      // save it
                     pet.setId(savedPetWithId.getId());                              // Make sure to stored the saved pet id on the current Pet object
                 }
             }
@@ -85,7 +85,7 @@ public class VisitMapService extends AbstractMapService<Visit, Long> implements 
     }
 
     @Override
-    public Visit findById(Long id) {
+    public VisitDTO findById(Long id) {
         return super.findById(id);
     }
 }

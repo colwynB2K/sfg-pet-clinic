@@ -1,8 +1,6 @@
 package guru.springframework.sfgpetclinic.model;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -10,7 +8,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Data
-@Slf4j@EqualsAndHashCode(exclude = {"owner", "visits"}, callSuper = false)
 @Entity
 @Table(name = "pet")
 public class Pet extends BaseEntity {
@@ -31,4 +28,21 @@ public class Pet extends BaseEntity {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "pet")                         // When we delete the pet, also delete the associated visits
     private Set<Visit> visits = new HashSet<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof Pet))
+            return false;
+
+        Pet other = (Pet) o;
+
+        return id != null && id.equals(other.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 }

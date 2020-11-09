@@ -1,7 +1,8 @@
 package guru.springframework.sfgpetclinic.service.springdatajpa;
 
+import guru.springframework.sfgpetclinic.dto.SpecialtyDTO;
 import guru.springframework.sfgpetclinic.exception.ObjectNotFoundException;
-import guru.springframework.sfgpetclinic.model.Specialty;
+import guru.springframework.sfgpetclinic.mapper.SpecialtyMapper;
 import guru.springframework.sfgpetclinic.repository.SpecialtyRepository;
 import guru.springframework.sfgpetclinic.service.SpecialtyService;
 import lombok.extern.slf4j.Slf4j;
@@ -18,33 +19,35 @@ import java.util.Set;
 public class SpecialtyRepositoryService implements SpecialtyService {
 
     private final SpecialtyRepository specialtyRepository;
+    private final SpecialtyMapper specialtyMapper;
 
     @Autowired
-    public SpecialtyRepositoryService(SpecialtyRepository specialtyRepository) {
+    public SpecialtyRepositoryService(SpecialtyRepository specialtyRepository, SpecialtyMapper specialtyMapper) {
         this.specialtyRepository = specialtyRepository;
+        this.specialtyMapper = specialtyMapper;
     }
 
     @Override
-    public Set<Specialty> findAll() {
-        Set<Specialty> specialties = new HashSet<>();
-        specialtyRepository.findAll().forEach(specialties::add);
+    public Set<SpecialtyDTO> findAll() {
+        Set<SpecialtyDTO> specialties = new HashSet<>();
+        specialtyRepository.findAll().forEach(specialty -> specialties.add(specialtyMapper.toDTO(specialty)));
 
         return specialties;
     }
 
     @Override
-    public Specialty findById(Long id) {
-        return specialtyRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("No Specialty found for id '" + id +  "'"));
+    public SpecialtyDTO findById(Long id) {
+        return specialtyMapper.toDTO(specialtyRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("No Specialty found for id '" + id +  "'")));
     }
 
     @Override
-    public Specialty save(Specialty specialty) {
-        return specialtyRepository.save(specialty);
+    public SpecialtyDTO save(SpecialtyDTO specialty) {
+        return specialtyMapper.toDTO(specialtyRepository.save(specialtyMapper.toEntity(specialty)));
     }
 
     @Override
-    public void delete(Specialty specialty) {
-        specialtyRepository.delete(specialty);
+    public void delete(SpecialtyDTO specialty) {
+        specialtyRepository.delete(specialtyMapper.toEntity(specialty));
     }
 
     @Override

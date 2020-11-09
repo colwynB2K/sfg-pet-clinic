@@ -1,10 +1,10 @@
 package guru.springframework.sfgpetclinic.service.map;
 
-import guru.springframework.sfgpetclinic.model.BaseEntity;
+import guru.springframework.sfgpetclinic.dto.BaseDTO;
 
 import java.util.*;
 
-public class AbstractMapService<T extends BaseEntity, ID extends Long> {
+public class AbstractMapService<T extends BaseDTO, ID extends Long> {
 
     protected Map<Long, T> map = new HashMap<>();
 

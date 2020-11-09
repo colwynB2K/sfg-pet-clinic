@@ -1,6 +1,6 @@
 package guru.springframework.sfgpetclinic.controller;
 
-import guru.springframework.sfgpetclinic.model.Owner;
+import guru.springframework.sfgpetclinic.dto.OwnerDTO;
 import guru.springframework.sfgpetclinic.service.OwnerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,14 +31,14 @@ class OwnerControllerTest {
 
     MockMvc mockMvc;
 
-    Set<Owner> owners;
+    Set<OwnerDTO> owners;
 
     @BeforeEach
     void setUp() {
         mockMvc = MockMvcBuilders.standaloneSetup(ownerController).build();         // Initialize the Mock MVC environment using a standalone setup (it will only load the mentioned controller and its dependencies and not a full web application context which is awfully slow)
 
         owners = new HashSet<>();
-        owners.add(Owner.builder().build());
+        owners.add(OwnerDTO.builder().build());
     }
 
     @Test
@@ -85,7 +85,7 @@ class OwnerControllerTest {
         Long id = 1L;
 
         // given
-        when(mockOwnerService.findAllByLastNameLike(anyString())).thenReturn(Collections.singleton(Owner.builder().id(id).build()));
+        when(mockOwnerService.findAllByLastNameLike(anyString())).thenReturn(Collections.singleton(OwnerDTO.builder().id(id).build()));
 
         // when
         mockMvc.perform(get("/owners?lastName=BLAAT"))
@@ -98,7 +98,7 @@ class OwnerControllerTest {
     @Test
     void findOwnersReturnsMany() throws Exception {
         // given
-        owners.add(Owner.builder().city("Genk").build());                                     // Add second owner to set with city Genk (otherwise it won't get added as Set doesn't allow duplicates)
+        owners.add(OwnerDTO.builder().city("Genk").build());                                     // Add second owner to set with city Genk (otherwise it won't get added as Set doesn't allow duplicates)
         when(mockOwnerService.findAllByLastNameLike(anyString())).thenReturn(owners);
 
         // when
@@ -112,9 +112,8 @@ class OwnerControllerTest {
 
     @Test
     void showOwner() throws Exception {
-        Owner expectedOwner = Owner.builder().build();
-
         // given
+        OwnerDTO expectedOwner = OwnerDTO.builder().id(1L).build();
         when(mockOwnerService.findById(anyLong())).thenReturn(expectedOwner);
 
         // when
@@ -124,5 +123,66 @@ class OwnerControllerTest {
         .andExpect(view().name("owners/detail"));
 
         // then
+        verify(mockOwnerService).findById(anyLong());
     }
+
+   /* @Test
+    void showAddOwnerForm() throws Exception {
+        // when
+        mockMvc.perform(get("/owners/new"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("owners/form"))
+                .andExpect(model().attributeExists("owner"));
+
+        // then
+        verifyNoInteractions(mockOwnerService);
+    }
+
+    @Test
+    void createOwner() throws Exception {
+        // given
+        OwnerDTO expectedOwner = OwnerDTO.builder().id(1L).build();
+        when(mockOwnerService.save(any(OwnerDTO.class))).thenReturn(expectedOwner);
+
+        // when
+        mockMvc.perform(post("/owners/new"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/owners/1"))
+                .andExpect(model().attribute("owner", equalTo(expectedOwner)));
+
+        // then
+        verify(mockOwnerService).save(any(OwnerDTO.class));
+    }
+
+    @Test
+    void showUpdateOwnerForm() throws Exception {
+        // given
+        OwnerDTO expectedOwner = OwnerDTO.builder().id(1L).build();
+        when(mockOwnerService.findById(anyLong())).thenReturn(expectedOwner);
+
+        // when
+        mockMvc.perform(get("/owners/1/edit"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("owners/form"))
+                .andExpect(model().attribute("owner", equalTo(expectedOwner)));
+
+        // then
+        verify(mockOwnerService).findById(anyLong());
+    }
+
+    @Test
+    void updateOwner() throws Exception {
+        // given
+        OwnerDTO expectedOwner = OwnerDTO.builder().id(1L).build();
+        when(mockOwnerService.save(any(OwnerDTO.class))).thenReturn(expectedOwner);
+
+        // when
+        mockMvc.perform(post("/owners/1/edit"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/owners/1"))
+                .andExpect(model().attribute("owner", equalTo(expectedOwner)));
+
+        // then
+        verify(mockOwnerService).save(any(OwnerDTO.class));
+    }*/
 }

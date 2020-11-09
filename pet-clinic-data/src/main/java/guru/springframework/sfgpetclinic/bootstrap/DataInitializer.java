@@ -1,7 +1,7 @@
 package guru.springframework.sfgpetclinic.bootstrap;
 
 import guru.springframework.sfgpetclinic.model.*;
-import guru.springframework.sfgpetclinic.service.*;
+import guru.springframework.sfgpetclinic.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -13,29 +13,26 @@ import java.time.LocalDate;
 @Slf4j
 public class DataInitializer implements CommandLineRunner {
 
-    private final OwnerService ownerService;
-    private final PetTypeService petTypeService;
-    private final SpecialtyService specialtyService;
-    private final VetService vetService;
-    private final VisitService visitService;
+    private final OwnerRepository ownerRepository;
+    private final PetTypeRepository petTypeRepository;
+    private final SpecialtyRepository specialtyRepository;
+    private final VetRepository vetRepository;
+    private final VisitRepository visitRepository;
 
     @Autowired
-    public DataInitializer(
-            OwnerService ownerService,
-            PetTypeService petTypeService,
-            SpecialtyService specialtyService,
-            VetService vetService,
-            VisitService visitService) {
-        this.ownerService = ownerService;
-        this.petTypeService = petTypeService;
-        this.specialtyService = specialtyService;
-        this.vetService = vetService;
-        this.visitService = visitService;
+    public DataInitializer(OwnerRepository ownerRepository, PetTypeRepository petTypeRepository,
+                           SpecialtyRepository specialtyRepository, VetRepository vetRepository,
+                           VisitRepository visitRepository) {
+        this.ownerRepository = ownerRepository;
+        this.petTypeRepository = petTypeRepository;
+        this.specialtyRepository = specialtyRepository;
+        this.vetRepository = vetRepository;
+        this.visitRepository = visitRepository;
     }
 
     @Override
     public void run(String... args) throws Exception {
-        if (petTypeService.findAll().isEmpty()) {                         // Make sure that the data is only initialized in case there is no data
+        if (!petTypeRepository.findAll().iterator().hasNext()) {                         // Make sure that the data is only initialized in case there is no data
             loadData();
         }
     }
@@ -44,12 +41,12 @@ public class DataInitializer implements CommandLineRunner {
         PetType cat = new PetType();
         cat.setName("cat");
 
-        PetType savedCatPetType = petTypeService.save(cat);
+        PetType savedCatPetType = petTypeRepository.save(cat);
 
         PetType dog = new PetType();
         dog.setName("dog");
 
-        PetType savedDogPetType = petTypeService.save(dog);
+        PetType savedDogPetType = petTypeRepository.save(dog);
 
         log.info("Loaded Pet Types...");
 
@@ -69,7 +66,7 @@ public class DataInitializer implements CommandLineRunner {
 
         mike.getPets().add(mikesPet);           // Don't forget the reverse direction!
 
-        ownerService.save(mike);
+        ownerRepository.save(mike);
 
         Owner fiona = Owner.builder()
                 .firstName("Fiona")
@@ -87,21 +84,21 @@ public class DataInitializer implements CommandLineRunner {
 
         fiona.getPets().add(fionasPet);           // Don't forget the reverse direction!
 
-        ownerService.save(fiona);
+        ownerRepository.save(fiona);
 
         log.info("Loaded Owners...");
 
         Specialty radiology = new Specialty();
         radiology.setName("Radiology");
-        Specialty savedRadiologySpecialty = specialtyService.save(radiology);
+        Specialty savedRadiologySpecialty = specialtyRepository.save(radiology);
 
         Specialty surgery = new Specialty();
         surgery.setName("Surgery");
-        Specialty savedSurgerySpecialty = specialtyService.save(surgery);
+        Specialty savedSurgerySpecialty = specialtyRepository.save(surgery);
 
         Specialty dentistry = new Specialty();
         dentistry.setName("Dentistry");
-        Specialty savedDentistrySpecialty = specialtyService.save(dentistry);
+        Specialty savedDentistrySpecialty = specialtyRepository.save(dentistry);
 
         log.info("Loaded Specialties...");
 
@@ -111,7 +108,7 @@ public class DataInitializer implements CommandLineRunner {
 
         vet1.getSpecialties().add(savedRadiologySpecialty);
 
-        vetService.save(vet1);
+        vetRepository.save(vet1);
 
         Vet vet2 = new Vet();
         vet2.setFirstName("Jessie");
@@ -119,7 +116,7 @@ public class DataInitializer implements CommandLineRunner {
 
         vet2.getSpecialties().add(savedSurgerySpecialty);
 
-        vetService.save(vet2);
+        vetRepository.save(vet2);
 
         log.info("Loaded Vets...");
 
@@ -128,14 +125,14 @@ public class DataInitializer implements CommandLineRunner {
         mikesDogVisit.setDate(LocalDate.now());
         mikesDogVisit.setPet(mikesPet);
 
-        visitService.save(mikesDogVisit);
+        visitRepository.save(mikesDogVisit);
 
         Visit fionasCatVisit = new Visit();
         fionasCatVisit.setDescription("Sneezy Kitty");
         fionasCatVisit.setDate(LocalDate.now());
         fionasCatVisit.setPet(fionasPet);
 
-        visitService.save(fionasCatVisit);
+        visitRepository.save(fionasCatVisit);
 
         log.info("Loaded Visits...");
     }
