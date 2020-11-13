@@ -7,9 +7,8 @@
 <form th:object="${owner}" class="form-horizontal" id="add-owner-form" method="post"
       th:action="${owner['new']} ? '/owners/new' : '/owners/' + ${owner.id} + '/edit'">
     <div class="form-group has-feedback">
+        <!-- Don't forget: as we disallow the web layer to set the id property, we don't even need a hidden form input with an id value when we want to update an existing owner -->
 
-        <input th:if="!${owner['new']}"
-                th:replace="~{fragments/inputField :: input ('', 'id', 'hidden')}" />
         <input
                 th:replace="~{fragments/inputField :: input ('First Name', 'firstName', 'text')}" />
         <input

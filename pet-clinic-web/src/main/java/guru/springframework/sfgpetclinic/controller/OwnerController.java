@@ -108,9 +108,8 @@ public class OwnerController {
         if (result.hasErrors()) {
             return VIEWS_OWNER_OWNERS_FORM;
         } else {
-            if (owner.getId() == null) { // For some reason 'id' is always null on the incoming model
-                owner.setId(ownerId);
-            }
+            // Due to the hacking protection provided by the @InitBinder directive which doesn't allow the web layer to set the id property, this will always be null in the incoming model, so we need to set it from the url
+            owner.setId(ownerId);
 
             OwnerDTO savedOwner = ownerService.save(owner);
             model.addAttribute("owner", savedOwner);
