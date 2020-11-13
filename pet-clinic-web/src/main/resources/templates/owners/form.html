@@ -4,8 +4,12 @@
 <body>
 
 <h2>Owner</h2>
-<form th:object="${owner}" class="form-horizontal" id="add-owner-form" method="post">
+<form th:object="${owner}" class="form-horizontal" id="add-owner-form" method="post"
+      th:action="${owner['new']} ? '/owners/new' : '/owners/' + ${owner.id} + '/edit'">
     <div class="form-group has-feedback">
+
+        <input th:if="!${owner['new']}"
+                th:replace="~{fragments/inputField :: input ('', 'id', 'hidden')}" />
         <input
                 th:replace="~{fragments/inputField :: input ('First Name', 'firstName', 'text')}" />
         <input
@@ -19,10 +23,12 @@
     </div>
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-            <button
-                    th:with="text=${owner['new']} ? 'Add Owner' : 'Update Owner'"
-                    class="btn btn-default" type="submit" th:text="${text}">Add
-                Owner</button>
+            <!--/*
+                test if owner.isNew() returns true, basically test if it is a new or existing owner by checking if id is null
+                this requires a method new(), getNew() or isNew() to be available in the OwnerDTO
+            */-->
+            <button th:with="text=${owner['new']} ? 'Add Owner' : 'Update Owner'"
+                    class="btn btn-default" type="submit" th:text="${text}">Add Owner</button>
         </div>
     </div>
 </form>

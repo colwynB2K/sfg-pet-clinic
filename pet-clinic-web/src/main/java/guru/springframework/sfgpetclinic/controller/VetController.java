@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping({"/vets", "/vets.html"})
 public class VetController {
 
+    private static final String VIEWS_VETS_LIST = "vets/list";
+
     private final VetService vetService;
 
     @Autowired
@@ -25,6 +27,6 @@ public class VetController {
 
         model.addAttribute("vets", vetService.findAll());
 
-        return "vets/list";
+        return VIEWS_VETS_LIST;
     }
 }

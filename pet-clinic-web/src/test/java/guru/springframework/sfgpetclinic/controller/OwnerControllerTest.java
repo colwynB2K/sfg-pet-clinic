@@ -18,6 +18,7 @@ import java.util.Set;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(MockitoExtension.class)                                                 // Setup Mockito JUnit 5 environment, without this @Mock and @InjectMocks will not work
@@ -50,7 +51,7 @@ class OwnerControllerTest {
         mockMvc.perform(get("/owners"))                                     // get the owners list page
                 .andExpect(model().attribute("owners", equalTo(owners)))        // check that the model has a 'owners' attribute with a value equals to our owners HashSet
                 .andExpect(status().isOk())                                           // check for HTTP status 200
-                .andExpect(view().name("owners/list"));                // check the returned view name
+                .andExpect(view().name(OwnerController.VIEWS_OWNER_OWNERS_LIST));                // check the returned view name
 
         verify(mockOwnerService).findAll();                                            // As usual verify that method findAll() on the mocked OwnerService was called 1 time
     }
@@ -60,7 +61,7 @@ class OwnerControllerTest {
         mockMvc.perform(get("/owners/find"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("owner"))
-                .andExpect(view().name("owners/search-form"));
+                .andExpect(view().name(OwnerController.VIEWS_OWNER_OWNERS_SEARCH_FORM));
 
         verifyNoInteractions(mockOwnerService);                                         // As this method is not implemented yet, this should interact with the ownerService at all!
     }
@@ -75,7 +76,7 @@ class OwnerControllerTest {
         // when
         mockMvc.perform(get("/owners?lastName=BLAAT"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("owners/search-form"));
+                .andExpect(view().name(OwnerController.VIEWS_OWNER_OWNERS_SEARCH_FORM));
 
         verify(mockOwnerService).findAllByLastNameLike(anyString());
     }
@@ -90,7 +91,7 @@ class OwnerControllerTest {
         // when
         mockMvc.perform(get("/owners?lastName=BLAAT"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/owners/" + id));
+                .andExpect(view().name(OwnerController.VIEWS_OWNER_OWNERS_REDIRECT + id));
 
         verify(mockOwnerService).findAllByLastNameLike(anyString());
     }
@@ -105,7 +106,7 @@ class OwnerControllerTest {
         mockMvc.perform(get("/owners?lastName=BLAAT"))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("owners", equalTo(owners)))
-                .andExpect(view().name("owners/list"));
+                .andExpect(view().name(OwnerController.VIEWS_OWNER_OWNERS_LIST));
 
         verify(mockOwnerService).findAllByLastNameLike(anyString());
     }
@@ -120,18 +121,18 @@ class OwnerControllerTest {
         mockMvc.perform(get("/owners/1"))
         .andExpect(status().isOk())
         .andExpect(model().attribute("owner", equalTo(expectedOwner)))
-        .andExpect(view().name("owners/detail"));
+        .andExpect(view().name(OwnerController.VIEWS_OWNER_OWNERS_DETAIL));
 
         // then
         verify(mockOwnerService).findById(anyLong());
     }
 
-   /* @Test
+    @Test
     void showAddOwnerForm() throws Exception {
         // when
         mockMvc.perform(get("/owners/new"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("owners/form"))
+                .andExpect(view().name(OwnerController.VIEWS_OWNER_OWNERS_FORM))
                 .andExpect(model().attributeExists("owner"));
 
         // then
@@ -147,7 +148,7 @@ class OwnerControllerTest {
         // when
         mockMvc.perform(post("/owners/new"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/owners/1"))
+                .andExpect(view().name(OwnerController.VIEWS_OWNER_OWNERS_REDIRECT + "1"))
                 .andExpect(model().attribute("owner", equalTo(expectedOwner)));
 
         // then
@@ -163,7 +164,7 @@ class OwnerControllerTest {
         // when
         mockMvc.perform(get("/owners/1/edit"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("owners/form"))
+                .andExpect(view().name(OwnerController.VIEWS_OWNER_OWNERS_FORM))
                 .andExpect(model().attribute("owner", equalTo(expectedOwner)));
 
         // then
@@ -179,10 +180,10 @@ class OwnerControllerTest {
         // when
         mockMvc.perform(post("/owners/1/edit"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/owners/1"))
+                .andExpect(view().name(OwnerController.VIEWS_OWNER_OWNERS_REDIRECT + "1"))
                 .andExpect(model().attribute("owner", equalTo(expectedOwner)));
 
         // then
         verify(mockOwnerService).save(any(OwnerDTO.class));
-    }*/
+    }
 }
