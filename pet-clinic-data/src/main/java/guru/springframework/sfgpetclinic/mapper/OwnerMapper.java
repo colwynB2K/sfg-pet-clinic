@@ -2,40 +2,40 @@ package guru.springframework.sfgpetclinic.mapper;
 
 import guru.springframework.sfgpetclinic.dto.OwnerDTO;
 import guru.springframework.sfgpetclinic.model.Owner;
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
+import org.mapstruct.Named;
 
 import java.util.Set;
 
 @Mapper(componentModel = "spring", uses = {PetMapper.class})
 public interface OwnerMapper {
 
-    @IterableMapping(qualifiedByName = "toEntity")
+
     Set<Owner> toEntitySet(Set<OwnerDTO> ownerDTOs);
 
-    @Named("toEntity")
-    @Mappings(
-            @Mapping(target = "pets", qualifiedByName = "PetSetIgnoreOwnerChildPets")
-    )
+    @Mappings({
+            @Mapping(target = "pets", qualifiedByName = "SetPetIgnoreOwnerChildPetsAndVisitChildPet")
+    })
     Owner toEntity(OwnerDTO ownerDTO);
 
-    @Named("OwnerIgnorePetChildOwner")
-    @Mappings(
-            @Mapping(target = "pets", qualifiedByName = "PetSetIgnoreOwner")
-    )
-    Owner toEntityIgnorePetChildOwner(OwnerDTO ownerDTO);
+    @Named("OwnerIgnorePetsChildRelations")
+    @Mappings({
+        @Mapping(target = "pets", qualifiedByName = "SetPetIgnoreChildRelations")
+    })
+    Owner toEntityIgnorePetsChildRelations(OwnerDTO ownerDTO);
 
-    @IterableMapping(qualifiedByName = "toDTO")
     Set<OwnerDTO> toDTOSet(Set<Owner> owners);
 
-    @Named("toDTO")
-    @Mappings(
-            @Mapping(target = "pets", qualifiedByName = "PetSetIgnoreOwnerChildPets")
-    )
+    @Mappings({
+            @Mapping(target = "pets", qualifiedByName = "SetPetIgnoreOwnerChildPetsAndVisitChildPet")
+    })
     OwnerDTO toDTO(Owner owner);
 
-    @Named("OwnerIgnorePetChildOwner")
-    @Mappings(
-            @Mapping(target = "pets", qualifiedByName = "PetSetIgnoreOwner")
-    )
-    OwnerDTO toDTOIgnorePetChildOwner(Owner owner);
+    @Named("OwnerIgnorePetsChildRelations")
+    @Mappings({
+            @Mapping(target = "pets", qualifiedByName = "SetPetIgnoreChildRelations")
+    })
+    OwnerDTO toDTOIgnorePetsChildRelations(Owner owner);
 }

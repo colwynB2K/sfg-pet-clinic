@@ -9,65 +9,77 @@ import java.util.Set;
 @Mapper(componentModel = "spring", uses = {OwnerMapper.class, PetTypeMapper.class, VisitMapper.class})
 public interface PetMapper {
 
-    @IterableMapping(qualifiedByName = "toEntity")
+    @Named("SetPetIgnoreOwnerChildPetsAndVisitChildPet")
+    @IterableMapping(qualifiedByName = "PetIgnoreOwnerChildPetsAndVisitChildPet")
+    Set<Pet> toEntitySetIgnoreOwnerChildPetsAndVisitChildPet(Set<PetDTO> petDTOs);
+
     Set<Pet> toEntitySet(Set<PetDTO> petDTOs);
 
-    @Named("toEntity")
+    @Named("PetIgnoreOwnerChildPetsAndVisitChildPet")
     @Mappings({
-            @Mapping(target = "owner", qualifiedByName = "OwnerIgnorePetChildOwner"),
-            @Mapping(target = "visits", qualifiedByName = "VisitSetIgnorePetChildVisits")
+            @Mapping(target = "owner.pets", ignore = true),
+            @Mapping(target = "visits", qualifiedByName = "SetVisitIgnorePet")
+    })
+    Pet toEntityIgnoreOwnerAndVisitChildPet(PetDTO petDTO);
+
+    @Mappings({
+            @Mapping(target = "owner", qualifiedByName = "OwnerIgnorePetsChildRelations"),
+            @Mapping(target = "visits", qualifiedByName = "SetVisitIgnorePetChildRelations")
     })
     Pet toEntity(PetDTO petDTO);
 
-    @Named("PetSetIgnoreOwnerChildPets")
-    @IterableMapping(qualifiedByName = "PetIgnoreOwnerChildPets")
-    Set<Pet> toEntitySetIgnoreOwnerChildPets(Set<PetDTO> petDTOs);
+    @Named("SetPetIgnoreChildRelations")
+    @IterableMapping(qualifiedByName = "PetIgnoreChildRelations")
+    Set<Pet> toEntitySetIgnoreChildRelations(Set<PetDTO> petDTOs);
 
-    @Named("PetIgnoreOwnerChildPets")
-    @Mappings(
-            @Mapping(target = "owner.pets", ignore = true)
-    )
-    Pet toEntityIgnoreOwnerChildPets(PetDTO petDTO);
+    @Named("PetIgnoreChildRelations")
+    @Mappings({
+            @Mapping(target = "owner", ignore = true),
+            @Mapping(target = "visits", ignore = true)
+    })
+    Pet toEntityIgnoreChildRelations(PetDTO petDTO);
 
-    @Named("PetSetIgnoreOwner")
-    @IterableMapping(qualifiedByName = "PetIgnoreOwner")
-    Set<Pet> toEntitySetIgnoreOwner(Set<PetDTO> pets);
+    @Named("PetIgnoreVisitChildPet")
+    @Mappings({
+            @Mapping(target = "owner.pets", ignore = true),
+            @Mapping(target = "visits", qualifiedByName = "SetVisitIgnorePet")
+    })
+    Pet toEntityIgnoreVisitChildPet(PetDTO petDTO);
 
-    @Named("PetIgnoreOwner")
-    @Mappings(
-            @Mapping(target = "owner", ignore = true)
-    )
-    Pet toEntityIgnoreOwner(PetDTO petDTO);
+    @Named("SetPetIgnoreOwnerChildPetsAndVisitChildPet")
+    @IterableMapping(qualifiedByName = "PetIgnoreOwnerChildPetsAndVisitChildPet")
+    Set<PetDTO> toDTOSetIgnoreOwnerAndVisitChildPet(Set<Pet> pets);
 
-
-    @IterableMapping(qualifiedByName = "toDTO")
     Set<PetDTO> toDTOSet(Set<Pet> pets);
 
-    @Named("toDTO")
+    @Named("PetIgnoreOwnerChildPetsAndVisitChildPet")
     @Mappings({
-            @Mapping(target = "owner", qualifiedByName = "OwnerIgnorePetChildOwner"),
-            @Mapping(target = "visits", qualifiedByName = "VisitSetIgnorePetChildVisits")
+            @Mapping(target = "owner.pets", ignore = true),
+            @Mapping(target = "visits", qualifiedByName = "SetVisitIgnorePet")
+    })
+    PetDTO toDTOIgnoreOwnerChildPetsAndVisitChildPet(Pet pet);
+
+    @Mappings({
+            @Mapping(target = "owner", qualifiedByName = "OwnerIgnorePetsChildRelations"),
+            @Mapping(target = "visits", qualifiedByName = "SetVisitIgnorePetChildRelations")
     })
     PetDTO toDTO(Pet pet);
 
-    @Named("PetSetIgnoreOwnerChildPets")
-    @IterableMapping(qualifiedByName = "PetIgnoreOwnerChildPets")
-    Set<PetDTO> toDTOSetIgnoreOwnerChildPets(Set<Pet> pets);
+    @Named("SetPetIgnoreChildRelations")
+    @IterableMapping(qualifiedByName = "PetIgnoreChildRelations")
+    Set<PetDTO> toDTOSetIgnoreChildRelations(Set<Pet> pets);
 
-    @Named("PetIgnoreOwnerChildPets")
-    @Mappings(
-            @Mapping(target = "owner.pets", ignore = true)
-    )
-    PetDTO toDTOIgnoreOwnerChildPets(Pet pet);
+    @Named("PetIgnoreChildRelations")
+    @Mappings({
+            @Mapping(target = "owner", ignore = true),
+            @Mapping(target = "visits", ignore = true)
+    })
+    PetDTO toDTOIgnoreChildRelations(Pet pet);
 
-    @Named("PetSetIgnoreOwner")
-    @IterableMapping(qualifiedByName = "PetIgnoreOwner")
-    Set<PetDTO> toDTOSetIgnoreOwner(Set<Pet> pets);
-
-    @Named("PetIgnoreOwner")
-    @Mappings(
-            @Mapping(target = "owner", ignore = true)
-    )
-    PetDTO toDTOIgnoreOwner(Pet pet);
-
+    @Named("PetIgnoreVisitChildPet")
+    @Mappings({
+            @Mapping(target = "owner.pets", ignore = true),
+            @Mapping(target = "visits", qualifiedByName = "SetVisitIgnorePet")
+    })
+    PetDTO toDTOIgnoreVisitChildPet(Pet pet);
 }

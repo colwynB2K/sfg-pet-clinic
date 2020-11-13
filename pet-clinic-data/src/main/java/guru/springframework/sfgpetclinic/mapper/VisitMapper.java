@@ -9,28 +9,55 @@ import java.util.Set;
 @Mapper(componentModel = "spring", uses = {PetMapper.class})
 public interface VisitMapper {
 
+    @Named("SetVisitIgnorePetChildRelations")
+    @IterableMapping(qualifiedByName = "VisitIgnorePetChildRelations")
+    Set<Visit> toEntityIgnorePetChildRelations(Set<VisitDTO> visitDTOS);
+
+    @Named("VisitIgnorePetChildRelations")
+    @Mappings({
+            @Mapping(target = "pet.owner", ignore = true),
+            @Mapping(target = "pet.visits", ignore = true)
+    })
+    Visit toEntityIgnorePetChildRelations(VisitDTO visitDTO);
+
+    @Named("SetVisitIgnorePet")
+    @IterableMapping(qualifiedByName = "VisitIgnorePet")
+    Set<Visit> toEntitySetIgnorePet(Set<VisitDTO> visitDTOS);
+
+    @Named("VisitIgnorePet")
+    @Mappings({
+            @Mapping(target = "pet", ignore = true)
+    })
+    Visit toEntityIgnorePet(VisitDTO visitDTO);
+
+    @Mappings({
+            @Mapping(target = "pet", qualifiedByName = "PetIgnoreVisitChildPet")
+    })
     Visit toEntity(VisitDTO visitDTO);
 
-    @Named("VisitSetIgnorePetChildVisits")
-    @IterableMapping(qualifiedByName = "VisitIgnorePetChildVisits")
-    Set<Visit> toEntitySetIgnorePetChildVisits(Set<VisitDTO> visitDTOs);
+    @Named("SetVisitIgnorePetChildRelations")
+    @IterableMapping(qualifiedByName = "VisitIgnorePetChildRelations")
+    Set<VisitDTO> toDTOSetIgnorePetChildRelations(Set<Visit> visits);
 
-    @Named("VisitIgnorePetChildVisits")
-    @Mappings(
+    @Named("VisitIgnorePetChildRelations")
+    @Mappings({
+            @Mapping(target = "pet.owner", ignore = true),
             @Mapping(target = "pet.visits", ignore = true)
-    )
-    Visit toEntityIgnorePetChildVisits(VisitDTO visitDTO);
+    })
+    VisitDTO toDTOIgnorePetChildRelations(Visit visit);
 
+    @Named("SetVisitIgnorePet")
+    @IterableMapping(qualifiedByName = "VisitIgnorePet")
+    Set<VisitDTO> toDTOSetIgnorePet(Set<Visit> visits);
 
+    @Named("VisitIgnorePet")
+    @Mappings({
+            @Mapping(target = "pet", ignore = true)
+    })
+    VisitDTO toDTOIgnorePet(Visit visit);
+
+    @Mappings({
+            @Mapping(target = "pet", qualifiedByName = "PetIgnoreVisitChildPet")
+    })
     VisitDTO toDTO(Visit visit);
-
-    @Named("VisitSetIgnorePetChildVisits")
-    @IterableMapping(qualifiedByName = "VisitIgnorePetChildVisits")
-    Set<VisitDTO> toDTOSetIgnorePetChildVisits(Set<Visit> visits);
-
-    @Named("VisitIgnorePetChildVisits")
-    @Mappings(
-            @Mapping(target = "pet.visits", ignore = true)
-    )
-    VisitDTO toDTOIgnorePetChildVisits(Visit visit);
 }
