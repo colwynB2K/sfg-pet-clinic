@@ -1,9 +1,18 @@
 package guru.springframework.sfgpetclinic.dto;
 
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class PetTypeDTO extends BaseDTO {
+
+    @Builder
+    public PetTypeDTO(Long id, String name) {
+        super(id);
+        this.name = name;
+    }
 
     private String name;
 
