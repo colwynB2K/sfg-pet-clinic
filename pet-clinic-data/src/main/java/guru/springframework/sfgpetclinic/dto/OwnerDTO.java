@@ -1,13 +1,17 @@
 package guru.springframework.sfgpetclinic.dto;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class OwnerDTO extends PersonDTO {
 
@@ -32,6 +36,17 @@ public class OwnerDTO extends PersonDTO {
 
     private Set<PetDTO> pets = new HashSet<>();
 
+    // Convenience methods
+    public PetDTO getPetByName(String name) {
+        return getPetByName(name, false);
+    }
+
+    public PetDTO getPetByName(String name, boolean ignoreNew) {
+
+        List<PetDTO> petsWithSameName = pets.stream().filter(pet -> pet.getName().equalsIgnoreCase(name)).collect(Collectors.toList());
+        return !petsWithSameName.isEmpty() ? petsWithSameName.get(0) : null;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -47,5 +62,18 @@ public class OwnerDTO extends PersonDTO {
     @Override
     public int hashCode() {
         return 31;
+    }
+
+    // Debugger triggered a StackOverflowError as it tries to print the objects in the IDE which caused circular references
+    @Override
+    public String toString() {
+        return "OwnerDTO{" +
+                "address='" + address + '\'' +
+                ", city='" + city + '\'' +
+                ", telephone='" + telephone + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", id=" + id +
+                '}';
     }
 }
