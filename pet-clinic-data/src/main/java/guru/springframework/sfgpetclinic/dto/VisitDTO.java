@@ -1,10 +1,17 @@
 package guru.springframework.sfgpetclinic.dto;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDate;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@Slf4j
 public class VisitDTO extends BaseDTO {
 
     private LocalDate date;
@@ -12,6 +19,14 @@ public class VisitDTO extends BaseDTO {
     private String description;
 
     private PetDTO pet;
+
+    @Builder
+    public VisitDTO(Long id, LocalDate date, String description, PetDTO pet) {
+        super(id);
+        this.date = date;
+        this.description = description;
+        this.pet = pet;
+    }
 
     @Override
     public boolean equals(Object o) {

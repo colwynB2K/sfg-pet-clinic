@@ -24,7 +24,9 @@ public class PetDTO extends BaseDTO {
         this.birthDate = birthDate;
         this.petType = petType;
         this.owner = owner;
-        this.visits = visits;
+        if (visits != null) {
+            this.visits = visits;
+        }
     }
 
     private String name;
