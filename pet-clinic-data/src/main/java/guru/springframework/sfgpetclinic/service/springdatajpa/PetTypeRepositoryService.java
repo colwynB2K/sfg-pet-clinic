@@ -54,4 +54,9 @@ public class PetTypeRepositoryService implements PetTypeService {
     public void deleteById(Long id) {
         petTypeRepository.deleteById(id);
     }
+
+    @Override
+    public PetTypeDTO findByName(String name) {
+        return petTypeMapper.toDTO(petTypeRepository.findByName(name));
+    }
 }

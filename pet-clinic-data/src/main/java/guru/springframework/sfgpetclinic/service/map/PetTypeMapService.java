@@ -6,7 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Profile({"default", "Map"})
@@ -36,5 +38,15 @@ public class PetTypeMapService extends AbstractMapService<PetTypeDTO, Long> impl
     @Override
     public PetTypeDTO findById(Long id) {
         return super.findById(id);
+    }
+
+    @Override
+    public PetTypeDTO findByName(String name) {
+        List<PetTypeDTO> petTypes = map.values().stream().filter(petType -> petType.getName().equals(name)).collect(Collectors.toList());
+        if (!petTypes.isEmpty()) {
+            return petTypes.get(0);
+        }
+
+        return null;
     }
 }

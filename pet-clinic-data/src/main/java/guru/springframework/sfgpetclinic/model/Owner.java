@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -42,6 +43,16 @@ public class Owner extends Person {
             fetch = FetchType.LAZY
     )
     private Set<Pet> pets = new HashSet<>();
+
+    // Convenience methods
+    public Pet getPetByName(String name) {
+        return getPetByName(name, false);
+    }
+
+    public Pet getPetByName(String name, boolean ignoreNew) {
+
+        return pets.stream().filter(pet -> pet.getName().equalsIgnoreCase(name)).collect(Collectors.toList()).get(0);
+    }
 
     @Override
     public boolean equals(Object o) {
