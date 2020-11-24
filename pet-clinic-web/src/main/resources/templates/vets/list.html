@@ -5,20 +5,22 @@
     <title>List of Vets</title>
 </head>
 <body>
-    <h2 th:text="'List of Vets'">List of Vets...</h2>
+    <h2>Veterinarians</h2>
     <table class="table table-striped">
         <thead>
         <tr>
-            <th>Id</th>
-            <th>First Name</th>
-            <th>Last Name</th>
+            <th>Name</th>
+            <th>Specialties</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="vet: ${vets}">
-            <td th:text="${vet.id}">ID</td>
-            <td th:text="${vet.firstName}">FirstName</td>
-            <td th:text="${vet.lastName}">LastName</td>
+            <td th:text="${vet.firstName + ' ' + vet.lastName}">Name</td>
+            <td>
+                <span th:each="specialty: ${vet.specialties}"
+                        th:text="${specialty.name + ' '}"/>
+                <span th:if="${vet.specialties?.size() == 0}">none</span><!--/* Provide fallback value of none in case no specialties were set.  ? tests if an expression evaluates to null before proceeding. */-->
+            </td>
         </tr>
         </tbody>
     </table>
